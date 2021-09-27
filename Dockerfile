@@ -12,6 +12,8 @@ RUN yarn install
 
 COPY . .
 
+RUN yarn generate-types
+
 EXPOSE 3000
 
 CMD ["yarn", "start"]
