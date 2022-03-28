@@ -2,9 +2,9 @@ import EtherLogo from 'src/config/assets/token_eth.svg'
 import { EnvironmentSettings, ETHEREUM_LAYER, ETHEREUM_NETWORK, NetworkConfig } from 'src/config/networks/network.d'
 
 const baseConfig: EnvironmentSettings = {
-  clientGatewayUrl: 'https://client-gateway.celo-safe.io/v1',
-  txServiceUrl: 'https://transaction-service.celo-safe.io/api/v1',
-  safeUrl: 'https://safe.celo.org',
+  clientGatewayUrl: process.env.REACT_APP_CLIENT_GATEWAY_URL || 'https://client-gateway.celo-safe.io/v1',
+  txServiceUrl: process.env.REACT_APP_TRANSACTION_SERVICE_URL || 'https://transaction-service.celo-safe.io/api/v1',
+  safeUrl: process.env.SAFE_URL || 'https://safe.celo.org',
   gasPriceOracles: [
     {
       url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:gnosis_safe',
