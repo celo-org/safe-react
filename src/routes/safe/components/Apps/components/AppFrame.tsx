@@ -19,7 +19,6 @@ import { currentSafe } from 'src/logic/safe/store/selectors'
 import { getNetworkId, getNetworkName, getSafeAppsRpcServiceUrl, getTxServiceUrl } from 'src/config'
 import { SAFE_ROUTES } from 'src/routes/routes'
 import { isSameURL } from 'src/utils/url'
-import { useAnalytics, SAFE_NAVIGATION_EVENT } from 'src/utils/googleAnalytics'
 import { LoadingContainer } from 'src/components/LoaderContainer/index'
 import { TIMEOUT } from 'src/utils/constants'
 
@@ -27,7 +26,6 @@ import { ConfirmTxModal } from './ConfirmTxModal'
 import { useIframeMessageHandler } from '../hooks/useIframeMessageHandler'
 import { useLegalConsent } from '../hooks/useLegalConsent'
 import LegalDisclaimer from './LegalDisclaimer'
-import { getAppInfoFromUrl } from '../utils'
 import { SafeApp } from '../types'
 import { useAppCommunicator } from '../communicator'
 import { fetchTokenCurrenciesBalances } from 'src/logic/safe/api/fetchTokenCurrenciesBalances'
@@ -90,7 +88,6 @@ const safeAppWeb3Provider = new Web3.providers.HttpProvider(getSafeAppsRpcServic
 const AppFrame = ({ appUrl }: Props): ReactElement => {
   const { address: safeAddress, ethBalance, owners, threshold } = useSelector(currentSafe)
   const safeName = useSelector((state) => addressBookEntryName(state, { address: safeAddress }))
-  const { trackEvent } = useAnalytics()
   const history = useHistory()
   const { consentReceived, onConsentReceipt } = useLegalConsent()
 
@@ -268,13 +265,6 @@ const AppFrame = ({ appUrl }: Props): ReactElement => {
     }
     loadApp()
   }, [appUrl])
-
-  //track GA
-  useEffect(() => {
-    if (safeApp) {
-      trackEvent({ category: SAFE_NAVIGATION_EVENT, action: 'Apps', label: safeApp.name })
-    }
-  }, [safeApp, trackEvent])
 
   if (!appUrl) {
     throw Error('App url No provided or it is invalid.')

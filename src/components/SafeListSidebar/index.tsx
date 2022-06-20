@@ -7,7 +7,6 @@ import { sortedSafeListSelector } from './selectors'
 import useSidebarStyles from './style'
 
 import Hairline from 'src/components/layout/Hairline'
-import { useAnalytics, SAFE_NAVIGATION_EVENT } from 'src/utils/googleAnalytics'
 
 import { safeAddressFromUrl } from 'src/logic/safe/store/selectors'
 import useOwnerSafes from 'src/logic/safe/hooks/useOwnerSafes'
@@ -29,12 +28,8 @@ export const SafeListSidebar = ({ children }: Props): ReactElement => {
   const safeAddress = useSelector(safeAddressFromUrl)
 
   const classes = useSidebarStyles()
-  const { trackEvent } = useAnalytics()
 
   const toggleSidebar = () => {
-    if (!isOpen) {
-      trackEvent({ category: SAFE_NAVIGATION_EVENT, action: 'Safe List Sidebar' })
-    }
     setIsOpen((prevIsOpen) => !prevIsOpen)
   }
 

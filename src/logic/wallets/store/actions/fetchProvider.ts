@@ -1,4 +1,3 @@
-import ReactGA from 'react-ga'
 import { Dispatch } from 'redux'
 
 import addProvider from './addProvider'
@@ -31,12 +30,6 @@ const handleProviderNotification = (provider, dispatch) => {
     // if you want to be able to dispatch a `closeSnackbar` action later on,
     // you SHOULD pass your own `key` in the options. `key` can be any sequence
     // of number or characters, but it has to be unique to a given snackbar.
-
-    ReactGA.event({
-      category: 'Wallets',
-      action: 'Connect a wallet',
-      label: provider.name,
-    })
   } else {
     dispatch(enqueueSnackbar(enhanceSnackbarForAction(NOTIFICATIONS.UNLOCK_WALLET_MSG)))
   }

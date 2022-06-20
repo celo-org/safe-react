@@ -27,7 +27,6 @@ import { makeAddressBookEntry } from 'src/logic/addressBook/model/addressBook'
 import { addressBookSafeLoad } from 'src/logic/addressBook/store/actions'
 import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { addOrUpdateSafe } from 'src/logic/safe/store/actions/addOrUpdateSafe'
-import { useAnalytics } from 'src/utils/googleAnalytics'
 import { sleep } from 'src/utils/timer'
 import { txMonitor } from 'src/logic/safe/transactions/txMonitor'
 
@@ -122,7 +121,6 @@ const Open = (): ReactElement => {
   const userAccount = useSelector(userAccountSelector)
   const dispatch = useDispatch()
   const location = useLocation()
-  const { trackEvent } = useAnalytics()
 
   useEffect(() => {
     // #122: Allow to migrate an old Multisig by passing the parameters to the URL.
@@ -187,11 +185,6 @@ const Open = (): ReactElement => {
     const owners = ownersAddresses.map((address, index) => makeAddressBookEntry({ address, name: ownersNames[index] }))
     const safe = makeAddressBookEntry({ address: safeAddress, name })
     await dispatch(addressBookSafeLoad([...owners, safe]))
-
-    trackEvent({
-      category: 'User',
-      action: 'Created a safe',
-    })
 
     // a default 5s wait before starting to request safe information
     await sleep(5000)
