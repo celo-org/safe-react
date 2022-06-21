@@ -19,6 +19,8 @@ import { currentSafe } from 'src/logic/safe/store/selectors'
 import { getNetworkId, getNetworkName, getSafeAppsRpcServiceUrl, getTxServiceUrl } from 'src/config'
 import { SAFE_ROUTES } from 'src/routes/routes'
 import { isSameURL } from 'src/utils/url'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { SAFE_APPS_EVENTS } from 'src/utils/events/safeApps'
 import { LoadingContainer } from 'src/components/LoaderContainer/index'
 import { TIMEOUT } from 'src/utils/constants'
 
@@ -26,6 +28,7 @@ import { ConfirmTxModal } from './ConfirmTxModal'
 import { useIframeMessageHandler } from '../hooks/useIframeMessageHandler'
 import { useLegalConsent } from '../hooks/useLegalConsent'
 import LegalDisclaimer from './LegalDisclaimer'
+import { getAppInfoFromUrl, EMPTY_SAFE_APP } from '../utils'
 import { SafeApp } from '../types'
 import { useAppCommunicator } from '../communicator'
 import { fetchTokenCurrenciesBalances } from 'src/logic/safe/api/fetchTokenCurrenciesBalances'
@@ -265,6 +268,12 @@ const AppFrame = ({ appUrl }: Props): ReactElement => {
     }
     loadApp()
   }, [appUrl])
+
+  useEffect(() => {
+    if (safeApp && safeApp.name !== EMPTY_SAFE_APP) {
+      trackEvent({ ...SAFE_APPS_EVENTS.OPEN_APP, label: safeApp.name })
+    }
+  }, [safeApp])
 
   if (!appUrl) {
     throw Error('App url No provided or it is invalid.')

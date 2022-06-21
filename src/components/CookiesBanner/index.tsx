@@ -10,6 +10,7 @@ import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBann
 import { cookieBannerOpen } from 'src/logic/cookies/store/selectors'
 import { loadFromCookie, saveCookie } from 'src/logic/cookies/utils'
 import { mainFontFamily, md, primary, screenSm } from 'src/theme/variables'
+import { loadGoogleTagManager, unloadGoogleTagManager } from 'src/utils/googleTagManager'
 import { CookieAttributes } from 'js-cookie'
 
 const isDesktop = process.env.REACT_APP_BUILD_FOR_DESKTOP
@@ -99,6 +100,9 @@ const CookiesBanner = (): ReactElement => {
         setLocalNecessary(acceptedNecessary)
 
         if (acceptedAnalytics && !isDesktop) {
+          loadGoogleTagManager()
+        } else {
+          unloadGoogleTagManager()
         }
       }
     }
@@ -130,6 +134,7 @@ const CookiesBanner = (): ReactElement => {
     setShowAnalytics(localAnalytics)
 
     if (!localAnalytics) {
+      unloadGoogleTagManager()
     }
 
     dispatch.current(openCookieBanner({ cookieBannerOpen: false }))

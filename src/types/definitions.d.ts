@@ -11,6 +11,7 @@ declare global {
       autoRefreshOnNetworkChange: boolean
       isMetaMask: boolean
     }
+    dataLayer?: DataLayerArgs['dataLayer']
   }
 }
 declare module '@openzeppelin/contracts/build/contracts/ERC721'

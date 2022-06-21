@@ -15,6 +15,7 @@ import {
 
 import { LoadingContainer } from 'src/components/LoaderContainer'
 import { lastViewedSafe } from 'src/logic/currentSession/store/selectors'
+import { usePageTracking } from 'src/utils/googleTagManager'
 
 const Welcome = React.lazy(() => import('./welcome/container'))
 const Open = React.lazy(() => import('./open/container/Open'))
@@ -35,6 +36,7 @@ const Routes = (): React.ReactElement => {
     }
   }, [location.pathname, isInitialLoad])
 
+  usePageTracking()
   return (
     <Switch>
       <Route
