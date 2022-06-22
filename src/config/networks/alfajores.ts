@@ -14,7 +14,7 @@ const baseConfig: EnvironmentSettings = {
   safeUrl: 'https://alfajores.safe.celo.org',
   gasPriceOracles: [
     {
-      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:gnosis_safe',
+      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:alfajores_celo_safe',
       gasParameter: 'fast',
       gweiFactor: '1',
     },

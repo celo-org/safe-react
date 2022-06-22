@@ -8,7 +8,7 @@ const baseConfig: EnvironmentSettings = {
   safeUrl: 'https://safe.celo.org',
   gasPriceOracles: [
     {
-      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:gnosis_safe',
+      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:celo_safe',
       gasParameter: 'fast',
       gweiFactor: '1',
     },
