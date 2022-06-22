@@ -13,7 +13,7 @@ const baseConfig: EnvironmentSettings = {
   safeUrl: 'https://baklava.safe.celo.org',
   gasPriceOracles: [
     {
-      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:gnosis_safe',
+      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:baklava_celo_safe',
       gasParameter: 'fast',
       gweiFactor: '1',
     },

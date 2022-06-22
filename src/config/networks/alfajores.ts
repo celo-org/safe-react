@@ -8,12 +8,12 @@ import {
 } from 'src/config/networks/network.d'
 
 const baseConfig: EnvironmentSettings = {
-  clientGatewayUrl: 'https://client-gateway.celo-safe.io/v1',
-  txServiceUrl: 'https://transaction-service.celo-safe.io/api/v1',
-  safeUrl: 'https://alfajores.safe.celo.org',
+  clientGatewayUrl: 'https://client-gateway.gnosis-safe-staging.celo-networks-dev.org',
+  txServiceUrl: 'https://transaction-service.gnosis-safe-staging.celo-networks-dev.org/api/v1',
+  safeUrl: 'https://safe.celo.org',
   gasPriceOracles: [
     {
-      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:gnosis_safe',
+      url: 'https://www.gasnow.org/api/v3/gas/price?utm_source=:alfajores_celo_safe',
       gasParameter: 'fast',
       gweiFactor: '1',
     },
