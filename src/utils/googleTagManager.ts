@@ -11,6 +11,7 @@ import {
 import { Cookie, removeCookies } from 'src/logic/cookies/utils'
 import { SafeApp } from 'src/routes/safe/components/Apps/types'
 import { EMPTY_SAFE_APP } from 'src/routes/safe/components/Apps/utils'
+import { getNetworkId } from 'src/config'
 /** TODO: Implement */
 function getPathname(): string {
   return ''
@@ -57,6 +58,7 @@ export const loadGoogleTagManager = (): void => {
     dataLayer: {
       // Must emit (custom) event in order to trigger page tracking
       event: GTM_EVENT.PAGEVIEW,
+      chainId: getNetworkId(),
       pageLocation: `${location.origin}${page_path}`,
       pagePath: page_path,
       // Block JS variables and custom scripts
@@ -96,6 +98,7 @@ export const usePageTracking = (): void => {
       dataLayer: {
         // Must emit (custom) event in order to trigger page tracking
         event: GTM_EVENT.PAGEVIEW,
+        chainId: getNetworkId(),
         pageLocation: `${location.origin}${page_path}`,
         pagePath: page_path,
         // Clear dataLayer
