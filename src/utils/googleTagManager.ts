@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
-import { useLocation } from 'react-router-dom'
+import { matchPath, useLocation } from 'react-router-dom'
 import {
   GOOGLE_TAG_MANAGER_ID,
   GOOGLE_TAG_MANAGER_AUTH_LIVE,
@@ -12,9 +12,18 @@ import { Cookie, removeCookies } from 'src/logic/cookies/utils'
 import { SafeApp } from 'src/routes/safe/components/Apps/types'
 import { EMPTY_SAFE_APP } from 'src/routes/safe/components/Apps/utils'
 import { getNetworkId } from 'src/config'
-/** TODO: Implement */
-function getPathname(): string {
-  return ''
+import { SAFE_ROUTES, SAFE_ADDRESS_SLUG } from 'src/routes/routes'
+
+export const getAnonymizedPathname = (pathname: string): string => {
+  const ANON_SAFE_ADDRESS = 'SAFE_ADDRESS'
+
+  for (const route of Object.values(SAFE_ROUTES)) {
+    const safeAddressMatch = matchPath(pathname, { path: route })
+    if (safeAddressMatch) {
+      return pathname.replace(safeAddressMatch.params[SAFE_ADDRESS_SLUG], ANON_SAFE_ADDRESS)
+    }
+  }
+  return pathname
 }
 
 type GTMEnvironment = 'LIVE' | 'LATEST' | 'DEVELOPMENT'
@@ -42,7 +51,7 @@ export enum GTM_EVENT {
   SAFE_APP = 'safeApp',
 }
 
-export const loadGoogleTagManager = (): void => {
+export const loadGoogleTagManager = (pathname: string): void => {
   const GTM_ENVIRONMENT = IS_PRODUCTION ? GTM_ENV_AUTH.LIVE : GTM_ENV_AUTH.DEVELOPMENT
   console.log('GTM_ENVIRONMENT', GTM_ENVIRONMENT)
   if (!GOOGLE_TAG_MANAGER_ID || !GTM_ENVIRONMENT.auth) {
@@ -50,7 +59,7 @@ export const loadGoogleTagManager = (): void => {
     return
   }
 
-  const page_path = getPathname()
+  const page_path = getAnonymizedPathname(pathname)
 
   TagManager.initialize({
     gtmId: GOOGLE_TAG_MANAGER_ID,
@@ -92,7 +101,7 @@ export const usePageTracking = (): void => {
       return
     }
 
-    const page_path = getPathname()
+    const page_path = getAnonymizedPathname(pathname)
 
     TagManager.dataLayer({
       dataLayer: {

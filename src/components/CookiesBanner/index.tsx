@@ -12,6 +12,7 @@ import { loadFromCookie, saveCookie } from 'src/logic/cookies/utils'
 import { mainFontFamily, md, primary, screenSm } from 'src/theme/variables'
 import { loadGoogleTagManager, unloadGoogleTagManager } from 'src/utils/googleTagManager'
 import { CookieAttributes } from 'js-cookie'
+import { useLocation } from 'react-router-dom'
 
 const isDesktop = process.env.REACT_APP_BUILD_FOR_DESKTOP
 
@@ -72,6 +73,7 @@ const useStyles = makeStyles({
 const CookiesBanner = (): ReactElement => {
   const classes = useStyles()
   const dispatch = useRef(useDispatch())
+  const { pathname } = useLocation()
 
   const [showAnalytics, setShowAnalytics] = useState(false)
   const [localNecessary, setLocalNecessary] = useState(true)
@@ -100,7 +102,7 @@ const CookiesBanner = (): ReactElement => {
         setLocalNecessary(acceptedNecessary)
 
         if (acceptedAnalytics && !isDesktop) {
-          loadGoogleTagManager()
+          loadGoogleTagManager(pathname)
         } else {
           unloadGoogleTagManager()
         }

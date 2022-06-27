@@ -3,6 +3,7 @@ import { matchPath } from 'react-router-dom'
 import * as reactRouterDom from 'react-router-dom'
 import { renderHook } from '@testing-library/react-hooks'
 import { waitFor } from '@testing-library/react'
+import { GTM_EVENT, usePageTracking } from '../googleTagManager'
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -89,9 +90,9 @@ describe('googleTagManager', () => {
         })
       })
 
-      history.push('/test1')
-      history.push('/test2')
-      history.push('/test3')
+      history.pushState({}, '/test1')
+      history.pushState({}, '/test2')
+      history.pushState({}, '/test3')
 
       waitFor(() => {
         expect(dataLayerSpy).toHaveBeenCalledTimes(4)
