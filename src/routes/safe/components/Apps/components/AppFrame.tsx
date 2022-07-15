@@ -244,6 +244,8 @@ const AppFrame = ({ appUrl }: Props): ReactElement => {
 
     // Safe Apps SDK V2 Handler
     communicator?.send({ safeTxHash }, requestId as string)
+
+    trackEvent({ ...SAFE_APPS_EVENTS.TRANSACTION_CONFIRMED, label: safeApp?.name })
   }
 
   const onTxReject = (requestId: RequestId) => {
@@ -255,6 +257,8 @@ const AppFrame = ({ appUrl }: Props): ReactElement => {
 
     // Safe Apps SDK V2 Handler
     communicator?.send('Transaction was rejected', requestId as string, true)
+
+    trackEvent({ ...SAFE_APPS_EVENTS.TRANSACTION_REJECTED, label: safeApp?.name })
   }
 
   useEffect(() => {

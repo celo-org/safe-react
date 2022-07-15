@@ -34,6 +34,8 @@ import { checkIfOffChainSignatureIsPossible, getPreValidatedSignatures } from 's
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { isTxPendingError } from 'src/logic/wallets/getWeb3'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { WALLET_EVENTS } from 'src/utils/events/wallet'
 
 export interface CreateTransactionArgs {
   navigateToTransactionsTab?: boolean
@@ -138,6 +140,7 @@ export const createTransaction =
         const signature = await tryOffChainSigning(safeTxHash, { ...txArgs, safeAddress }, hardwareWallet, safeVersion)
 
         if (signature) {
+          trackEvent(WALLET_EVENTS.OFF_CHAIN_SIGNATURE)
           dispatch(closeSnackbarAction({ key: beforeExecutionKey }))
           dispatch(fetchTransactions(safeAddress))
 
@@ -146,6 +149,8 @@ export const createTransaction =
           return
         }
       }
+
+      trackEvent(WALLET_EVENTS.ON_CHAIN_INTERACTION)
 
       const tx = isExecution ? getExecutionTransaction(txArgs) : getApprovalTransaction(safeInstance, safeTxHash)
       const sendParams: PayableTx = {

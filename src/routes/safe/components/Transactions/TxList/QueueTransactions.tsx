@@ -1,5 +1,5 @@
 import { Loader, Title } from '@gnosis.pm/safe-react-components'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 
 import Img from 'src/components/layout/Img'
 import { ActionModal } from './ActionModal'
@@ -10,9 +10,20 @@ import { Centered, NoTransactions } from './styled'
 import { TxActionProvider } from './TxActionProvider'
 import { TxsInfiniteScroll } from './TxsInfiniteScroll'
 import { TxLocationContext } from './TxLocationProvider'
+import { TX_LIST_EVENTS } from 'src/utils/events/txList'
+import { trackEvent } from 'src/utils/googleTagManager'
 
 export const QueueTransactions = (): ReactElement => {
   const { count, isLoading, hasMore, next, transactions } = usePagedQueuedTransactions()
+
+  useEffect(() => {
+    if (count > 0) {
+      trackEvent({
+        ...TX_LIST_EVENTS.QUEUED_TXS,
+        label: count,
+      })
+    }
+  }, [count])
 
   if (count === 0 && isLoading) {
     return (

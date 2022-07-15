@@ -10,6 +10,8 @@ import { checksumAddress } from 'src/utils/checksumAddress'
 import HelpInfo from 'src/routes/safe/components/AddressBook/HelpInfo'
 import { validateCsvData, validateFile } from 'src/routes/safe/components/AddressBook/utils'
 import { ETHEREUM_NETWORK } from 'src/config/networks/network'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { ADDRESS_BOOK_EVENTS } from 'src/utils/events/addressBook'
 
 const ImportContainer = styled.div`
   flex-direction: column;
@@ -41,6 +43,7 @@ const ImportEntriesModal = ({ importEntryModalHandler, isOpen, onClose }: Import
   const [entryList, setEntryList] = useState<AddressBookEntry[]>([])
 
   const handleImportEntrySubmit = () => {
+    trackEvent({ ...ADDRESS_BOOK_EVENTS.IMPORT_BUTTON, label: entryList.length })
     setCsvLoaded(false)
     importEntryModalHandler(entryList)
   }

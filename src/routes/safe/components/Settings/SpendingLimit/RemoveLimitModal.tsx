@@ -23,6 +23,8 @@ import { getResetTimeOptions } from './FormFields/ResetTime'
 import { AddressInfo, ResetTimeInfo, TokenInfo } from './InfoDisplay'
 import { SpendingLimitTable } from './LimitsTable/dataFetcher'
 import { useStyles } from './style'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { SETTINGS_EVENTS } from 'src/utils/events/settings'
 
 interface RemoveSpendingLimitModalProps {
   onClose: () => void
@@ -85,6 +87,8 @@ export const RemoveLimitModal = ({ onClose, spendingLimit, open }: RemoveSpendin
           notifiedTransaction: TX_NOTIFICATION_TYPES.REMOVE_SPENDING_LIMIT_TX,
         }),
       )
+
+      trackEvent(SETTINGS_EVENTS.SPENDING_LIMIT.LIMIT_REMOVED)
     } catch (e) {
       console.error(
         `failed to remove spending limit ${spendingLimit.beneficiary} -> ${spendingLimit.spent.tokenAddress}`,

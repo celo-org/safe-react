@@ -29,6 +29,8 @@ import { userAccountSelector } from 'src/logic/wallets/store/selectors'
 import { addOrUpdateSafe } from 'src/logic/safe/store/actions/addOrUpdateSafe'
 import { sleep } from 'src/utils/timer'
 import { txMonitor } from 'src/logic/safe/transactions/txMonitor'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { CREATE_SAFE_EVENTS } from 'src/utils/events/createLoadSafe'
 
 const SAFE_PENDING_CREATION_STORAGE_KEY = 'SAFE_PENDING_CREATION_STORAGE_KEY'
 
@@ -96,6 +98,7 @@ export const createSafe = async (values: CreateSafeValues, userAccount: string):
         txMonitor({ sender: userAccount, hash: txHash, data: deploymentTx.encodeABI() })
           .then((txReceipt) => {
             console.log('Speed up tx mined:', txReceipt)
+            trackEvent(CREATE_SAFE_EVENTS.CREATED_SAFE)
             resolve(txReceipt)
           })
           .catch((error) => {
@@ -165,6 +168,21 @@ const Open = (): ReactElement => {
     }
 
     const receiptPromise = createSafe(values, userAccount)
+
+    trackEvent({
+      ...CREATE_SAFE_EVENTS.OWNERS,
+      label: Number(values.owners || 0),
+    })
+    trackEvent({
+      ...CREATE_SAFE_EVENTS.THRESHOLD,
+      label: Number(values.confirmations || 1),
+    })
+    if (values.customSafeName) {
+      trackEvent({
+        ...CREATE_SAFE_EVENTS.NAME_SAFE,
+        label: values.customSafeName,
+      })
+    }
     setCreationTxPromise(receiptPromise)
     setShowProgress(true)
   }

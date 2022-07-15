@@ -32,7 +32,7 @@ const CREATE_SAFE = {
     event: GTM_EVENT.CLICK,
     action: 'Open Safe',
   },
-}
+} as const
 
 export const CREATE_SAFE_CATEGORY = 'create-safe'
 export const CREATE_SAFE_EVENTS = addEventCategory(CREATE_SAFE, CREATE_SAFE_CATEGORY)
@@ -58,7 +58,7 @@ const LOAD_SAFE = {
     event: GTM_EVENT.CLICK,
     action: 'Open Safe',
   },
-}
+} as const
 
 export const LOAD_SAFE_CATEGORY = 'load-safe'
 export const LOAD_SAFE_EVENTS = addEventCategory(LOAD_SAFE, LOAD_SAFE_CATEGORY)

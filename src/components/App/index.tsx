@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { SnackbarProvider } from 'notistack'
 import { useSelector } from 'react-redux'
@@ -33,6 +33,8 @@ import { grantedSelector } from 'src/routes/safe/container/selector'
 import ReceiveModal from './ReceiveModal'
 import { useSidebarItems } from 'src/components/AppLayout/Sidebar/useSidebarItems'
 import useAddressBookSync from 'src/logic/addressBook/hooks/useAddressBookSync'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { OVERVIEW_EVENTS } from 'src/utils/events/overview'
 
 const notificationStyles = {
   success: {
@@ -95,6 +97,11 @@ const App: React.FC = ({ children }) => {
     }
   }, [matchSafe, history])
 
+  const onNewTransactionClick = useCallback(() => {
+    trackEvent(OVERVIEW_EVENTS.NEW_TRANSACTION)
+    showSendFunds('')
+  }, [showSendFunds])
+
   const onReceiveShow = () => onShow('Receive')
   const onReceiveHide = () => onHide('Receive')
 
@@ -128,7 +135,7 @@ const App: React.FC = ({ children }) => {
             granted={granted}
             onToggleSafeList={toggleSidebar}
             onReceiveClick={onReceiveShow}
-            onNewTransactionClick={() => showSendFunds('')}
+            onNewTransactionClick={onNewTransactionClick}
           >
             {children}
           </AppLayout>

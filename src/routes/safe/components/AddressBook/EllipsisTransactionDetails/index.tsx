@@ -16,6 +16,8 @@ import { SAFE_ROUTES } from 'src/routes/routes'
 import { safeAddressFromUrl } from 'src/logic/safe/store/selectors'
 import { xs } from 'src/theme/variables'
 import { grantedSelector } from 'src/routes/safe/container/selector'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { TX_LIST_EVENTS } from 'src/utils/events/txList'
 
 const useStyles = makeStyles(
   createStyles({
@@ -68,6 +70,12 @@ export const EllipsisTransactionDetails = ({
     })
 
     dispatch(push(`${addressBookPath}?entryAddress=${address}`))
+
+    trackEvent({
+      ...TX_LIST_EVENTS.ADDRESS_BOOK,
+      label: isStoredInAddressBook ? 'Edit' : 'Add',
+    })
+
     closeMenuHandler()
   }
 

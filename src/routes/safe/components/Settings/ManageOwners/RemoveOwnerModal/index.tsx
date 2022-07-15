@@ -13,6 +13,9 @@ import { createTransaction } from 'src/logic/safe/store/actions/createTransactio
 import { currentSafe } from 'src/logic/safe/store/selectors'
 import { Dispatch } from 'src/logic/safe/store/actions/types.d'
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { SETTINGS_EVENTS } from 'src/utils/events/settings'
+import { store } from 'src/store'
 
 type OwnerValues = OwnerData & {
   threshold: string
@@ -46,6 +49,9 @@ export const sendRemoveOwner = async (
       notifiedTransaction: TX_NOTIFICATION_TYPES.SETTINGS_CHANGE_TX,
     }),
   )
+
+  trackEvent({ ...SETTINGS_EVENTS.THRESHOLD.THRESHOLD, label: values.threshold })
+  trackEvent({ ...SETTINGS_EVENTS.THRESHOLD.OWNERS, label: currentSafe(store.getState()).owners.length })
 }
 
 type RemoveOwnerProps = {
