@@ -4,7 +4,6 @@ export const OPEN_ADDRESS = '/open'
 export const LOAD_ADDRESS = '/load'
 export const WELCOME_ADDRESS = '/welcome'
 
-export const SAFE_ADDRESS_SLUG = ':safeAddress'
 export enum SAFE_ROUTES {
   ASSETS_BASE_ROUTE = '/safes/:safeAddress/balances',
   ASSETS_BALANCES = '/safes/:safeAddress/balances',

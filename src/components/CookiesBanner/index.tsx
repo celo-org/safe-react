@@ -152,7 +152,7 @@ const CookiesBanner = (): ReactElement => {
             <Link className={classes.link} to="https://clabs.co/privacy">
               Cookie Policy
             </Link>{' '}
-            for more information. By clicking &quot;Accept all&quot;, you agree to the storing of cookies on your device
+            for more information. By clicking &quot;Accet all&quot;, you agree to the storing of cookies on your device
             to enhance site navigation, analyze site usage and provide customer support.
           </p>
           <div className={classes.form}>

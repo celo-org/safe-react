@@ -4,7 +4,6 @@ import { matchPath, useLocation } from 'react-router-dom'
 import {
   GOOGLE_TAG_MANAGER_ID,
   GOOGLE_TAG_MANAGER_AUTH_LIVE,
-  GOOGLE_TAG_MANAGER_AUTH_LATEST,
   IS_PRODUCTION,
   GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH,
 } from 'src/utils/constants'
@@ -12,21 +11,19 @@ import { Cookie, removeCookies } from 'src/logic/cookies/utils'
 import { SafeApp } from 'src/routes/safe/components/Apps/types'
 import { EMPTY_SAFE_APP } from 'src/routes/safe/components/Apps/utils'
 import { getNetworkId } from 'src/config'
-import { SAFE_ROUTES, SAFE_ADDRESS_SLUG } from 'src/routes/routes'
+import { SAFE_ROUTES } from 'src/routes/routes'
 
 export const getAnonymizedPathname = (pathname: string): string => {
-  const ANON_SAFE_ADDRESS = 'SAFE_ADDRESS'
-
   for (const route of Object.values(SAFE_ROUTES)) {
     const safeAddressMatch = matchPath(pathname, { path: route })
     if (safeAddressMatch) {
-      return pathname.replace(safeAddressMatch.params[SAFE_ADDRESS_SLUG], ANON_SAFE_ADDRESS)
+      return safeAddressMatch.path
     }
   }
   return pathname
 }
 
-type GTMEnvironment = 'LIVE' | 'LATEST' | 'DEVELOPMENT'
+type GTMEnvironment = 'LIVE' | 'STAGING' | 'DEVELOPMENT'
 type GTMEnvironmentArgs = Required<Pick<TagManagerArgs, 'auth' | 'preview'>>
 
 const GTM_ENV_AUTH: Record<GTMEnvironment, GTMEnvironmentArgs> = {
@@ -34,13 +31,13 @@ const GTM_ENV_AUTH: Record<GTMEnvironment, GTMEnvironmentArgs> = {
     auth: GOOGLE_TAG_MANAGER_AUTH_LIVE,
     preview: 'env-1',
   },
-  LATEST: {
-    auth: GOOGLE_TAG_MANAGER_AUTH_LATEST,
-    preview: 'env-2',
+  STAGING: {
+    auth: GOOGLE_TAG_MANAGER_AUTH_LIVE,
+    preview: 'env-6',
   },
   DEVELOPMENT: {
     auth: GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH,
-    preview: 'env-4',
+    preview: 'env-5',
   },
 }
 
@@ -51,6 +48,7 @@ export enum GTM_EVENT {
   SAFE_APP = 'safeApp',
 }
 
+let loaded = false
 export const loadGoogleTagManager = (pathname: string): void => {
   const GTM_ENVIRONMENT = IS_PRODUCTION ? GTM_ENV_AUTH.LIVE : GTM_ENV_AUTH.DEVELOPMENT
   console.log('GTM_ENVIRONMENT', GTM_ENVIRONMENT)
@@ -75,9 +73,12 @@ export const loadGoogleTagManager = (pathname: string): void => {
       'gtm.blocklist': ['j', 'jsm', 'customScripts'],
     },
   })
+
+  loaded = true
 }
 
 export const unloadGoogleTagManager = (): void => {
+  loaded = false
   if (!window.dataLayer) {
     return
   }
@@ -152,7 +153,6 @@ export const trackEvent = ({ event, category, action, label }: CustomEvent): voi
     eventAction: action,
     eventLabel: tryParse(label),
   }
-  console.log('dataLayer', dataLayer)
 
   track(dataLayer)
 }
@@ -204,6 +204,10 @@ export const trackSafeAppMessage = ({
 function track(dataLayer: EventDataLayer | SafeAppEventDataLayer) {
   if (!IS_PRODUCTION) {
     console.info('[GTM]', dataLayer)
+  }
+
+  if (!loaded) {
+    return
   }
 
   TagManager.dataLayer({
