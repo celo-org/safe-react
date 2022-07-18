@@ -6,6 +6,7 @@ import {
   GOOGLE_TAG_MANAGER_AUTH_LIVE,
   IS_PRODUCTION,
   GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH,
+  GOOGLE_TAG_MANAGER_ENV,
 } from 'src/utils/constants'
 import { Cookie, removeCookies } from 'src/logic/cookies/utils'
 import { SafeApp } from 'src/routes/safe/components/Apps/types'
@@ -29,15 +30,15 @@ type GTMEnvironmentArgs = Required<Pick<TagManagerArgs, 'auth' | 'preview'>>
 const GTM_ENV_AUTH: Record<GTMEnvironment, GTMEnvironmentArgs> = {
   LIVE: {
     auth: GOOGLE_TAG_MANAGER_AUTH_LIVE,
-    preview: 'env-1',
+    preview: GOOGLE_TAG_MANAGER_ENV,
   },
   STAGING: {
     auth: GOOGLE_TAG_MANAGER_AUTH_LIVE,
-    preview: 'env-6',
+    preview: GOOGLE_TAG_MANAGER_ENV,
   },
   DEVELOPMENT: {
     auth: GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH,
-    preview: 'env-5',
+    preview: GOOGLE_TAG_MANAGER_ENV,
   },
 }
 
