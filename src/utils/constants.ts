@@ -49,6 +49,7 @@ export const KNOWN_MODULES = {
   [GNOSISDAO_SAFESNAP_MODULE_ADDRESS]: 'GnosisDAO SafeSnap',
 }
 
+export const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || ''
 export const GOOGLE_TAG_MANAGER_ID = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID || ''
 export const GOOGLE_TAG_MANAGER_ENV = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ENV || 'env-5' // env-5 is development on GTM's website
 export const GOOGLE_TAG_MANAGER_AUTH_LIVE = process.env.REACT_APP_GOOGLE_TAG_MANAGER_LIVE_AUTH || ''
