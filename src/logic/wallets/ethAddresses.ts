@@ -13,6 +13,15 @@ export const isEmptyAddress = (address: string | undefined): boolean => {
   return sameAddress(address, EMPTY_DATA) || sameAddress(address, ZERO_ADDRESS)
 }
 
+// Helper function for formatting ethereum addresses.
+// If input address if longer than 40 bytes, takes the last 40 and adds "0x" prefix
+export const formatAddress = (address: string): string => {
+  if (address.length > 40) {
+    address = address.substring(address.length - 40, address.length)
+  }
+  return `0x${address}`
+}
+
 export const shortVersionOf = (value: string, cut: number): string => {
   if (!value) {
     return 'Unknown'
