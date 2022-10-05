@@ -21,8 +21,8 @@ const baseConfig: EnvironmentSettings = {
   safeAppsRpcServiceUrl: 'https://forno.celo.org',
   rpcServiceUrl: 'https://forno.celo.org',
   networkExplorerName: 'Blockscout',
-  networkExplorerUrl: 'https://explorer.celo.org',
-  networkExplorerApiUrl: 'https://explorer.celo.org/api',
+  networkExplorerUrl: 'https://explorer.celo.org/mainnet',
+  networkExplorerApiUrl: 'https://explorer.celo.org/mainnet/api',
 }
 
 const mainnet: NetworkConfig = {
