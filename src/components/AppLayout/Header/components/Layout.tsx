@@ -76,6 +76,12 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
           <Img alt="Celo Safe" height={62} src={SafeLogo} testId="heading-gnosis-logo" />
         </Link>
       </Col>
+      <div>
+        Celo Safe is{' '}
+        <a target="_blank" rel="noreferrer" href="https://forum.celo.org/t/multisig-celo-safe-re-launch/4529">
+          being upgraded!
+        </a>
+      </div>
       <Spacer />
       <Provider
         info={providerInfo}
