@@ -80,7 +80,12 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
         Celo Safe is{' '}
         <a target="_blank" rel="noreferrer" href="https://forum.celo.org/t/multisig-celo-safe-re-launch/4529">
           being upgraded!
+        </a>{' '}
+        Start{' '}
+        <a target="_blank" rel="noreferrer" href="https://forms.gle/ZVccS2NtEKPLQbgX6">
+          beta testing here
         </a>
+        .
       </div>
       <Spacer />
       <Provider
