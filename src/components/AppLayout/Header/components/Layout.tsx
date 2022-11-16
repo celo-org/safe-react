@@ -63,6 +63,9 @@ const styles = () => ({
   },
 })
 
+const FORUM_POST_URL = 'https://forum.celo.org/t/multisig-celo-safe-re-launch/4529/25?u=0xarthurxyz'
+const NEW_SAFE_URL = 'https://safe.celo.org'
+
 const Layout = ({ classes, providerDetails, providerInfo }) => {
   const { clickAway, open, toggle } = useStateHandler()
   const { clickAway: clickAwayNetworks, open: openNetworks, toggle: toggleNetworks } = useStateHandler()
@@ -77,13 +80,13 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
         </Link>
       </Col>
       <div>
-        Celo Safe is{' '}
-        <a target="_blank" rel="noreferrer" href="https://forum.celo.org/t/multisig-celo-safe-re-launch/4529">
-          being upgraded!
-        </a>{' '}
-        Start{' '}
-        <a target="_blank" rel="noreferrer" href="https://forms.gle/ZVccS2NtEKPLQbgX6">
-          beta testing here
+        Celo Safe{' '}
+        <a target="_blank" rel="noreferrer" href={FORUM_POST_URL}>
+          was upgraded
+        </a>
+        ! Use the{' '}
+        <a target="_blank" rel="noreferrer" href={NEW_SAFE_URL}>
+          new version here
         </a>
         .
       </div>
