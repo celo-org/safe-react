@@ -1,5 +1,5 @@
 import { Text, theme, Title } from '@gnosis.pm/safe-react-components'
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -9,7 +9,6 @@ import { ModulesTable } from './ModulesTable'
 
 import Block from 'src/components/layout/Block'
 import { currentSafe } from 'src/logic/safe/store/selectors'
-import { useAnalytics, SAFE_NAVIGATION_EVENT } from 'src/utils/googleAnalytics'
 import { TransactionGuard } from './TransactionGuard'
 
 const InfoText = styled(Text)`
@@ -37,11 +36,6 @@ const Advanced = (): ReactElement => {
   const { nonce, modules, guard } = useSelector(currentSafe) ?? {}
 
   const moduleData = modules ? getModuleData(modules) ?? null : null
-  const { trackEvent } = useAnalytics()
-
-  useEffect(() => {
-    trackEvent({ category: SAFE_NAVIGATION_EVENT, action: 'Settings', label: 'Advanced' })
-  }, [trackEvent])
 
   return (
     <>

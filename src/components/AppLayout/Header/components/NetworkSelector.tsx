@@ -1,4 +1,4 @@
-import { ReactElement, useRef, Fragment } from 'react'
+import { ReactElement, useRef, Fragment, useCallback } from 'react'
 import styled from 'styled-components'
 import { makeStyles } from '@material-ui/core/styles'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -17,7 +17,10 @@ import { screenSm, sm } from 'src/theme/variables'
 import { sameString } from 'src/utils/strings'
 import { getNetworkName } from 'src/config'
 import { ReturnValue } from 'src/logic/hooks/useStateHandler'
-import { NetworkInfo } from 'src/config/networks/network'
+import { ETHEREUM_NETWORK, NetworkInfo } from 'src/config/networks/network'
+import { setStoredNetworkId } from 'src/utils/constants'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { OVERVIEW_EVENTS } from 'src/utils/events/overview'
 
 const styles = {
   root: {
@@ -82,6 +85,20 @@ const NetworkSelector = ({ open, toggle, networks, clickAway }: NetworkSelectorP
   const networkRef = useRef(null)
   const classes = useStyles()
   const networkName = getNetworkName().toLowerCase()
+
+  const onNetworkSwitch = useCallback(
+    (e: React.SyntheticEvent, chainId: ETHEREUM_NETWORK) => {
+      e.preventDefault()
+      clickAway()
+
+      trackEvent({ ...OVERVIEW_EVENTS.SWITCH_NETWORK, label: chainId })
+
+      setStoredNetworkId(chainId)
+      window.location.href = ''
+    },
+    [clickAway],
+  )
+
   return (
     <>
       <div className={classes.root} ref={networkRef}>
@@ -105,20 +122,17 @@ const NetworkSelector = ({ open, toggle, networks, clickAway }: NetworkSelectorP
             <>
               <ClickAwayListener mouseEvent="onClick" onClickAway={clickAway} touchEvent={false}>
                 <List className={classes.network} component="div">
-                  {networks
-                    // TODO Remove when alfajores is supported
-                    .filter((network) => network.id !== '44787')
-                    .map((network) => (
-                      <Fragment key={network.id}>
-                        <StyledLink href={network.safeUrl}>
-                          <NetworkLabel networkInfo={network} />
-                          {sameString(networkName, network.label?.toLowerCase()) && (
-                            <Icon type="check" size="md" color="primary" />
-                          )}
-                        </StyledLink>
-                        <StyledDivider />
-                      </Fragment>
-                    ))}
+                  {networks.map((network) => (
+                    <Fragment key={network.id}>
+                      <StyledLink href="" onClick={(e) => onNetworkSwitch(e, network.id)}>
+                        <NetworkLabel networkInfo={network} />
+                        {sameString(networkName, network.label?.toLowerCase()) && (
+                          <Icon type="check" size="md" color="primary" />
+                        )}
+                      </StyledLink>
+                      <StyledDivider />
+                    </Fragment>
+                  ))}
                 </List>
               </ClickAwayListener>
             </>

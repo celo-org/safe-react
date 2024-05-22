@@ -38,6 +38,8 @@ import { EditableTxParameters } from 'src/routes/safe/components/Transactions/he
 import { TxParametersDetail } from 'src/routes/safe/components/Transactions/helpers/TxParametersDetail'
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { MODALS_EVENTS } from 'src/utils/events/modals'
 
 const useStyles = makeStyles(styles)
 
@@ -136,6 +138,9 @@ const ReviewSendFundsTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactE
     if (isSpendingLimit && txToken && tx.tokenSpendingLimit) {
       const spendingLimitTokenAddress = isSendingNativeToken ? ZERO_ADDRESS : txToken.address
       const spendingLimit = getSpendingLimitContract()
+
+      trackEvent(MODALS_EVENTS.USE_SPENDING_LIMIT)
+
       try {
         await spendingLimit.methods
           .executeAllowanceTransfer(

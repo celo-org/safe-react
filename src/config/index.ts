@@ -14,15 +14,15 @@ import {
 import {
   APP_ENV,
   ETHERSCAN_API_KEY,
+  getStoredNetworkId,
   GOOGLE_ANALYTICS_ID,
   INFURA_TOKEN,
-  NETWORK,
   NODE_ENV,
   SAFE_APPS_RPC_TOKEN,
 } from 'src/utils/constants'
 import { ensureOnce } from 'src/utils/singleton'
 
-export const getNetworkId = (): ETHEREUM_NETWORK => ETHEREUM_NETWORK[NETWORK]
+export const getNetworkId = (): ETHEREUM_NETWORK => getStoredNetworkId()
 
 export const getNetworkName = (): string => {
   const networkNames = Object.keys(ETHEREUM_NETWORK)
@@ -94,6 +94,12 @@ const configuration = (): NetworkSpecificConfiguration => {
   const configFile = networks[getNetworkName().toLowerCase()]
 
   // defaults to 'production' as it's the only environment that is required for the network configs
+  console.log({
+    networkName: getNetworkName().toLowerCase(),
+    networks,
+    configFile,
+    currentEnvironment,
+  })
   const networkBaseConfig = configFile.environment[currentEnvironment] ?? configFile.environment.production
 
   return {

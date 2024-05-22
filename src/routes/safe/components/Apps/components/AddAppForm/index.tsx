@@ -17,6 +17,8 @@ import { loadFromStorage, saveToStorage } from 'src/utils/storage'
 import { SAFE_ROUTES } from 'src/routes/routes'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
 import { safeAddressFromUrl } from 'src/logic/safe/store/selectors'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { SAFE_APPS_EVENTS } from 'src/utils/events/safeApps'
 
 const FORM_ID = 'add-apps-form'
 
@@ -90,6 +92,7 @@ const AddApp = ({ appList, closeModal }: AddAppProps): ReactElement => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = useCallback(async () => {
+    trackEvent(SAFE_APPS_EVENTS.ADD_CUSTOM_APP)
     const persistedAppList =
       (await loadFromStorage<(StoredSafeApp & { disabled?: number[] })[]>(APPS_STORAGE_KEY)) || []
     const newAppList = [

@@ -2,6 +2,8 @@ import { Button, Icon, Loader, theme, Title as TitleSRC } from '@gnosis.pm/safe-
 import { ButtonProps as ButtonPropsMUI, Modal as ModalMUI } from '@material-ui/core'
 import cn from 'classnames'
 import { ReactElement, ReactNode, ReactNodeArray } from 'react'
+import { getModalEvent } from 'src/utils/events/modals'
+import { trackEvent } from 'src/utils/googleTagManager'
 import styled from 'styled-components'
 
 type Theme = typeof theme
@@ -230,6 +232,7 @@ const Buttons = ({ cancelButtonProps = {}, confirmButtonProps = {} }: ButtonsPro
     status: cancelStatus = ButtonStatus.READY,
     text: cancelText = ButtonStatus.LOADING === cancelStatus ? 'Cancelling' : 'Cancel',
     testId: cancelTestId = '',
+    onClick: cancelOnClick,
     ...cancelProps
   } = cancelButtonProps
   const {
@@ -237,6 +240,7 @@ const Buttons = ({ cancelButtonProps = {}, confirmButtonProps = {} }: ButtonsPro
     status: confirmStatus = ButtonStatus.READY,
     text: confirmText = ButtonStatus.LOADING === confirmStatus ? 'Submitting' : 'Submit',
     testId: confirmTestId = '',
+    onClick: confirmOnClick,
     ...confirmProps
   } = confirmButtonProps
 
@@ -246,9 +250,13 @@ const Buttons = ({ cancelButtonProps = {}, confirmButtonProps = {} }: ButtonsPro
         size="md"
         color="primary"
         variant="outlined"
-        type={cancelProps?.onClick ? 'button' : 'submit'}
+        type={cancelOnClick ? 'button' : 'submit'}
         disabled={cancelDisabled || [ButtonStatus.DISABLED, ButtonStatus.LOADING].includes(cancelStatus)}
         data-testid={cancelTestId}
+        onClick={(e) => {
+          trackEvent(getModalEvent(cancelText))
+          cancelOnClick?.(e)
+        }}
         {...cancelProps}
       >
         {ButtonStatus.LOADING === cancelStatus ? (
@@ -262,9 +270,13 @@ const Buttons = ({ cancelButtonProps = {}, confirmButtonProps = {} }: ButtonsPro
       </Button>
       <Button
         size="md"
-        type={confirmProps?.onClick ? 'button' : 'submit'}
+        type={confirmOnClick ? 'button' : 'submit'}
         disabled={confirmDisabled || [ButtonStatus.DISABLED, ButtonStatus.LOADING].includes(confirmStatus)}
         data-testid={confirmTestId}
+        onClick={(e) => {
+          trackEvent(getModalEvent(confirmText))
+          confirmOnClick?.(e)
+        }}
         {...confirmProps}
       >
         {ButtonStatus.LOADING === confirmStatus ? (

@@ -1,7 +1,24 @@
+import { ETHEREUM_NETWORK } from 'src/config/networks/network.d'
+
 export const APP_ENV = process.env.REACT_APP_ENV
 export const NODE_ENV = process.env.NODE_ENV
 export const IS_PRODUCTION = NODE_ENV === 'production'
-export const NETWORK = process.env.REACT_APP_NETWORK?.toUpperCase() || 'ALFAJORES'
+
+export function getStoredNetworkId(): ETHEREUM_NETWORK {
+  const storedId = localStorage.getItem('CELO_SAFE_NETWORK_ID')
+  const id = (storedId || process.env.REACT_APP_DEFAULT_CHAIN_ID || ETHEREUM_NETWORK.MAINNET) as ETHEREUM_NETWORK
+
+  if (!id) {
+    setStoredNetworkId(id)
+  }
+
+  return id
+}
+
+export function setStoredNetworkId(id: ETHEREUM_NETWORK): void {
+  localStorage.setItem('CELO_SAFE_NETWORK_ID', id)
+}
+
 export const GOOGLE_ANALYTICS_ID = process.env.REACT_APP_GOOGLE_ANALYTICS || ''
 export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN || ''
 export const PORTIS_ID = process.env.REACT_APP_PORTIS_ID ?? '852b763d-f28b-4463-80cb-846d7ec5806b'
@@ -31,3 +48,10 @@ export const KNOWN_MODULES = {
   [SPENDING_LIMIT_MODULE_ADDRESS]: 'Spending limit',
   [GNOSISDAO_SAFESNAP_MODULE_ADDRESS]: 'GnosisDAO SafeSnap',
 }
+
+export const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || ''
+export const GOOGLE_TAG_MANAGER_ID = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID || ''
+export const GOOGLE_TAG_MANAGER_ENV = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ENV || 'env-5' // env-5 is development on GTM's website
+export const GOOGLE_TAG_MANAGER_AUTH_LIVE = process.env.REACT_APP_GOOGLE_TAG_MANAGER_LIVE_AUTH || ''
+export const GOOGLE_TAG_MANAGER_AUTH_LATEST = process.env.REACT_APP_GOOGLE_TAG_MANAGER_LATEST_AUTH || ''
+export const GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH = process.env.REACT_APP_GOOGLE_TAG_MANAGER_DEVELOPMENT_AUTH || ''

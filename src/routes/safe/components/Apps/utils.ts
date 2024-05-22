@@ -19,6 +19,10 @@ interface AppData {
 }
 
 export const APPS_STORAGE_KEY = 'APPS_STORAGE_KEY'
+export const EMPTY_SAFE_APP = 'unknown'
+const removeLastTrailingSlash = (url: string): string => {
+  return url.replace(/\/+$/, '')
+}
 
 export const getAppInfoFromOrigin = (origin: string): { url: string; name: string } | null => {
   try {
@@ -33,7 +37,7 @@ export const isAppManifestValid = (appInfo: AppData['data'] | SafeApp | undefine
   // `appInfo` exists and `name` exists
   !!appInfo?.name &&
   // if `name` exists is not 'unknown'
-  appInfo.name !== 'unknown' &&
+  appInfo.name !== EMPTY_SAFE_APP &&
   // no `error` (or `error` undefined)
   !appInfo.error
 
@@ -41,7 +45,7 @@ export const getEmptySafeApp = (): SafeApp => {
   return {
     id: Math.random().toString(),
     url: '',
-    name: 'unknown',
+    name: EMPTY_SAFE_APP,
     iconUrl: appsIconSvg,
     error: false,
     description: '',

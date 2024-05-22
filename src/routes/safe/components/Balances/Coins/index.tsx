@@ -26,10 +26,11 @@ import {
   BalanceData,
 } from 'src/routes/safe/components/Balances/dataFetcher'
 import { extendedSafeTokensSelector, grantedSelector } from 'src/routes/safe/container/selector'
-import { useAnalytics, SAFE_NAVIGATION_EVENT } from 'src/utils/googleAnalytics'
 import { makeStyles } from '@material-ui/core/styles'
 import { styles } from './styles'
 import { currentCurrencySelector } from 'src/logic/currencyValues/store/selectors'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { ASSETS_EVENTS } from 'src/utils/events/assets'
 
 const StyledButton = styled(Button)`
   &&.MuiButton-root {
@@ -82,11 +83,14 @@ const Coins = (props: Props): React.ReactElement => {
   const selectedCurrency = useSelector(currentCurrencySelector)
   const safeTokens = useSelector(extendedSafeTokensSelector)
   const granted = useSelector(grantedSelector)
-  const { trackEvent } = useAnalytics()
 
+  const differingTokens = useMemo(() => safeTokens.size, [safeTokens])
   useEffect(() => {
-    trackEvent({ category: SAFE_NAVIGATION_EVENT, action: 'Coins' })
-  }, [trackEvent])
+    // Safe does not have any tokens until fetching is complete
+    if (differingTokens > 0) {
+      trackEvent({ ...ASSETS_EVENTS.DIFFERING_TOKENS, label: differingTokens })
+    }
+  }, [differingTokens])
 
   const filteredData: List<BalanceData> = useMemo(
     () => getBalanceData(safeTokens, selectedCurrency),

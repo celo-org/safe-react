@@ -10,7 +10,7 @@ import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBann
 import { cookieBannerOpen } from 'src/logic/cookies/store/selectors'
 import { loadFromCookie, saveCookie } from 'src/logic/cookies/utils'
 import { mainFontFamily, md, primary, screenSm } from 'src/theme/variables'
-import { loadGoogleAnalytics, removeCookies } from 'src/utils/googleAnalytics'
+import { loadGoogleTagManager, unloadGoogleTagManager } from 'src/utils/googleTagManager'
 import { CookieAttributes } from 'js-cookie'
 
 const isDesktop = process.env.REACT_APP_BUILD_FOR_DESKTOP
@@ -100,7 +100,9 @@ const CookiesBanner = (): ReactElement => {
         setLocalNecessary(acceptedNecessary)
 
         if (acceptedAnalytics && !isDesktop) {
-          loadGoogleAnalytics()
+          loadGoogleTagManager()
+        } else {
+          unloadGoogleTagManager()
         }
       }
     }
@@ -132,7 +134,7 @@ const CookiesBanner = (): ReactElement => {
     setShowAnalytics(localAnalytics)
 
     if (!localAnalytics) {
-      removeCookies()
+      unloadGoogleTagManager()
     }
 
     dispatch.current(openCookieBanner({ cookieBannerOpen: false }))
@@ -148,7 +150,7 @@ const CookiesBanner = (): ReactElement => {
             <Link className={classes.link} to="https://clabs.co/privacy">
               Cookie Policy
             </Link>{' '}
-            for more information. By clicking &quot;Accept all&quot;, you agree to the storing of cookies on your device
+            for more information. By clicking &quot;Accet all&quot;, you agree to the storing of cookies on your device
             to enhance site navigation, analyze site usage and provide customer support.
           </p>
           <div className={classes.form}>

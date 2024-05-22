@@ -26,6 +26,8 @@ import { TX_NOTIFICATION_TYPES } from 'src/logic/safe/transactions'
 import { useStyles } from './style'
 import { EditableTxParameters } from 'src/routes/safe/components/Transactions/helpers/EditableTxParameters'
 import { TxParameters } from 'src/routes/safe/container/hooks/useTransactionParameters'
+import { trackEvent } from 'src/utils/googleTagManager'
+import { SETTINGS_EVENTS } from 'src/utils/events/settings'
 
 const THRESHOLD_FIELD_NAME = 'threshold'
 
@@ -106,6 +108,10 @@ export const ChangeThresholdModal = ({
         notifiedTransaction: TX_NOTIFICATION_TYPES.SETTINGS_CHANGE_TX,
       }),
     )
+
+    trackEvent({ ...SETTINGS_EVENTS.THRESHOLD.OWNERS, label: ownersCount })
+    trackEvent({ ...SETTINGS_EVENTS.THRESHOLD.THRESHOLD, label: editedThreshold })
+
     onClose()
   }
 

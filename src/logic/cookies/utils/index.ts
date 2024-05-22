@@ -2,6 +2,11 @@ import Cookies, { CookieAttributes } from 'js-cookie'
 import { getNetworkName } from 'src/config'
 import { Errors, logError } from 'src/logic/exceptions/CodedException'
 
+export type Cookie = {
+  name: string
+  path: string
+}
+
 const VERSION_PREFIX = 'v1_'
 const PREFIX = `${VERSION_PREFIX}${getNetworkName()}__`
 
@@ -36,3 +41,9 @@ export const saveCookie = async (
 }
 
 export const removeCookie = (key: string, path: string, domain: string): void => Cookies.remove(key, { path, domain })
+
+export const removeCookies = (cookieList: Cookie[]): void => {
+  // Extracts domain, e.g. gnosis-safe.io
+  const domain = location.host.split('.').slice(-2).join('.')
+  cookieList.forEach((cookie) => removeCookie(cookie.name, cookie.path, `.${domain}`))
+}
